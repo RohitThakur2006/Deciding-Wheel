@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spin Wheel App</title>
-    
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
@@ -22,17 +21,20 @@
             <ul id="itemList">
                 </ul>
 
-            <button id="spinBtn" style="margin-top: 20px; width: 100%; font-size: 1.2rem;">SPIN!</button>
+            <button id="spinBtn">SPIN!</button>
         </div>
 
         <div class="wheel-container">
             <canvas id="wheelCanvas" width="400" height="400"></canvas>
+            <div class="wheel-arrow"></div>
         </div>
 
     </div>
-   <div id="reset">
-    <button id="resetbtn">Reset</button>
-  </div>
+
+    <div id="reset">
+        <button id="resetbtn">Reset</button>
+    </div>
+
     <script src="script.js"></script>
 
 </body>
