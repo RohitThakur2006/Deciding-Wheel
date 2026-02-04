@@ -1,48 +1,142 @@
-/* --- RESPONSIVE DESIGN (PHONE MODE) --- */
-
-@media (max-width: 768px) {
-    
-    #app-section {
-        flex-direction: column; 
-    }
-    #wheelCanvas {
-        /* This ensures the rotation is smooth */
-        transition: transform 4s ease-out; 
-    }
-    /* Make sure BOTH containers take full width on phone */
-    .controls-container, .wheel-container {
-        width: 100%;
-        margin-bottom: 20px; 
-    }
+/* --- 1. GENERAL & LAYOUT --- */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
 }
+
 #app-section {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-
     
-    /* ACTIVATE FLEXBOX */
-    display: flex;             /* Turns on the superpower */
-    justify-content: space-around; /* Spreads children apart */
-    align-items: center;       /* Aligns them vertically in the middle */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* padding-left: 33px; */
+    /* Flexbox Layout (Side by Side) */
+    display: flex;            
+    justify-content: space-around; 
+    align-items: center;      
 }
-#reset{
-  display: flex;
-  justify-content: space-around;
-  padding: 110px;
+
+h2{
+    align-items: center;
+    text-align: center;
+}
+
+.input-group{
+    text-align: center;
 }
 .controls-container {
-    width: 30%; /* Take up a bit less than half the space */
+    width: 30%; 
+  
 }
-.wheel-container {
-    width: 45%;
-    display: flex; 
-    justify-content: center;
+#itemList {
+    list-style: none;
+    padding: 0;       /* Reset everything first */
+    margin-left: 30px; 
+ 
 }
 
-ul{
-  list-style-image: url('icon.png');
-  /* list-style: square inside url("ion.png"); */
-  list-style-type: square;
+#spinBtn {
+    margin-top: 20px; 
+    width: 100%; 
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* --- 2. THE WHEEL & ARROW --- */
+.wheel-container {
+    position: relative; /* Anchor for the arrow */
+    width: 45%;
+    display: flex;
+    justify-content: center;
+}
+/* The Arrow (Static State - Top Position) */
+.wheel-arrow {
+    position: absolute;
+    /* Center it horizontally at the Top */
+    top: -10px;       
+    left: 50%;
+    
+    /* Center alignment correction */
+    transform: translateX(-50%);
+    
+    /* Draw a DOWNWARD pointing triangle */
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid #FF5733; /* Color part is now at the TOP */
+    
+    /* Physics Pivot: Hinge from the TOP edge */
+    transform-origin: top center; 
+    
+    z-index: 10;
+    display: none; /* Hidden until items are added */
+}
+
+/* The Arrow (Flick Action) */
+.wheel-arrow.flick {
+    animation: flick-action 0.15s ease-out;
+}
+
+/* FLICK ANIMATION (Adjusted for Top) */
+@keyframes flick-action {
+    0% { transform: translateX(-50%) rotate(0deg); }
+    /* Rotate Negative (Counter-Clockwise) because the wheel moves Left-to-Right at the top */
+    40% { transform: translateX(-50%) rotate(-40deg); } 
+    100% { transform: translateX(-50%) rotate(0deg); } 
+}
+
+/* --- 3. THE LIST (Custom Icons) --- */
+#itemList {
+    list-style: none;
+    padding: 0;
+}
+
+#itemList li {
+    background-image: url('icon1.png'); /* Ensure this file exists! */
+    background-size: 15px 15px; 
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    padding-left: 30px; 
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+/* --- 4. RESET BUTTON AREA --- */
+#reset {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#resetbtn {
+    padding: 10px 30px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* --- 5. RESPONSIVE (PHONE MODE) --- */
+@media (max-width: 768px) {
+    #app-section {
+        flex-direction: column; 
+    }
+    #itemList {
+        margin-left: 50px;       /* Remove the side space */
+        margin-top: 10px;     /* Keep the top space */
+        width: 100%;          /* Ensure it fits the phone width */
+             /* Force text to line up with the input */
+    }
+    .controls-container, .wheel-container {
+        width: 100%;
+        margin-bottom: 20px; 
+    }
 }
