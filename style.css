@@ -1,0 +1,48 @@
+/* --- RESPONSIVE DESIGN (PHONE MODE) --- */
+
+@media (max-width: 768px) {
+    
+    #app-section {
+        flex-direction: column; 
+    }
+    #wheelCanvas {
+        /* This ensures the rotation is smooth */
+        transition: transform 4s ease-out; 
+    }
+    /* Make sure BOTH containers take full width on phone */
+    .controls-container, .wheel-container {
+        width: 100%;
+        margin-bottom: 20px; 
+    }
+}
+#app-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+    
+    /* ACTIVATE FLEXBOX */
+    display: flex;             /* Turns on the superpower */
+    justify-content: space-around; /* Spreads children apart */
+    align-items: center;       /* Aligns them vertically in the middle */
+}
+#reset{
+  display: flex;
+  justify-content: space-around;
+  padding: 110px;
+}
+.controls-container {
+    width: 30%; /* Take up a bit less than half the space */
+}
+.wheel-container {
+    width: 45%;
+    display: flex; 
+    justify-content: center;
+}
+
+ul{
+  list-style-image: url('icon.png');
+  /* list-style: square inside url("ion.png"); */
+  list-style-type: square;
+}
