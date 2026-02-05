@@ -13,43 +13,131 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     display: flex;            
     justify-content: space-around; 
-    align-items: center;      
+    align-items: flex-start; /* Aligns items to top so list can grow down */
 }
 
 h2 {
-    align-items: center;
     text-align: center;
 }
 
 .input-group {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .controls-container {
-    width: 30%; 
+    width: 35%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the list inside this container */
 }
 
-#itemList {
-    list-style: none;
-    padding: 0;      
-    margin-left: 105px; /* YOUR CUSTOM MARGIN KEPT */
+/* --- 2. THE LIST (FIXED: Prevents Wheel Overlap) --- */
+#list {
+    /* STRICT LIMITS */
+    width: 300px;           
+    max-width: 100%;        
+    padding: 0;
+    margin-top: 20px;       
+    list-style: none;       
 }
 
+#list li {
+    display: flex;          
+    justify-content: space-between; 
+    align-items: center;    
+    
+    background: #fff;       
+    border: 1px solid #ddd; 
+    margin-bottom: 5px;     
+    padding: 8px;           
+    border-radius: 4px;     
+    
+    width: 100%;            
+    box-sizing: border-box; 
+    
+    /* Icon styling */
+    background-image: url('icon1.png'); 
+    background-size: 15px 15px; 
+    background-repeat: no-repeat;
+    background-position: 5px center; /* Position icon inside padding */
+    padding-left: 25px; /* Make room for icon */
+}
+
+#list li span {
+    font-size: 16px;
+    color: #333;
+    
+    /* NUCLEAR WRAPPING RULES: */
+    word-break: break-all;   
+    overflow-wrap: anywhere; 
+    white-space: normal;     
+    
+    flex: 1;                 
+    min-width: 0;            
+    margin-right: 10px;      
+    text-align: left;        
+}
+
+.delete-btn {
+    flex-shrink: 0;          
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;       
+    transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.1); 
+    filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); 
+}
+
+/* --- 3. THE BUTTONS --- */
 #spinBtn {
     margin-top: 20px; 
     width: 100%; 
+    max-width: 300px;
     font-size: 1.2rem;
     padding: 10px;
     background-color: #FF5733;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-/* --- 2. THE WHEEL & ARROW --- */
+#reset {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#resetbtn {
+    padding: 10px 30px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* BUTTON HOVER EFFECTS */
+#addBtn, #spinBtn, #resetbtn {
+    transition: all 0.2s ease-in-out; 
+}
+
+#addBtn:hover, #spinBtn:hover, #resetbtn:hover {
+    transform: scale(1.05); 
+    filter: brightness(1.2); 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
+    cursor: pointer;
+}
+
+/* --- 4. THE WHEEL & ARROW --- */
 .wheel-container {
     position: relative; 
-    width: 45%;
+    width: 50%;
     display: flex;
     justify-content: center;
 }
@@ -80,78 +168,7 @@ h2 {
     100% { transform: translateX(-50%) rotate(0deg); } 
 }
 
-/* --- 3. THE LIST --- */
-#itemList li {
-    background-image: url('icon1.png'); 
-    background-size: 15px 15px; 
-    background-repeat: no-repeat;
-    background-position: 0 center;
-    padding-left: 30px; 
-    margin-bottom: 10px;
-    font-size: 18px;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-}
-
-.delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin-left: 10px;
-    transition: transform 0.2s;
-}
-
-.delete-btn:hover {
-    transform: scale(1.1); 
-    filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); 
-}
-
-/* --- 4. RESET BUTTON --- */
-#reset {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-#resetbtn {
-    padding: 10px 30px;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-/* --- 5. RESPONSIVE --- */
-@media (max-width: 768px) {
-    #app-section {
-        flex-direction: column; 
-    }
-    #itemList {
-        margin-left: 50px;      
-        margin-top: 10px;    
-        width: 100%;          
-    }
-    .controls-container, .wheel-container {
-        width: 100%;
-        margin-bottom: 20px; 
-    }
-}
-
-/* BUTTON HOVER EFFECTS */
-#addBtn, #spinBtn, #resetbtn {
-    transition: all 0.2s ease-in-out; 
-}
-
-#addBtn:hover, #spinBtn:hover, #resetbtn:hover {
-    transform: scale(1.05); 
-    filter: brightness(1.2); 
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
-    cursor: pointer;
-}
-
-/* --- NEW: MODAL STYLES --- */
+/* --- 5. MODAL STYLES (Winner Popup) --- */
 .modal-overlay {
     display: none; 
     position: fixed; 
@@ -165,15 +182,25 @@ h2 {
     align-items: center;
 }
 
+/* This targets the inner white box */
 .modal-box {
     background-color: white;
     padding: 30px;
     border-radius: 15px;
     text-align: center;
-    width: 300px;
+    
+    /* FIX: Ensure box stays within screen */
+    width: 80%;
+    max-width: 400px; 
+    
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     animation: popIn 0.3s ease-out;
     position: relative;
+    
+    /* FIX: Force wrapping inside the box */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
 }
 
 .modal-box h2 {
@@ -182,8 +209,13 @@ h2 {
     font-size: 1.2rem;
 }
 
-.modal-box h3 {
-    font-size: 2rem;
+/* The Winner Text Styling */
+#winnerText {
+    width: 100%;            
+    display: block;         
+    overflow-wrap: anywhere; 
+    font-size: 1.5rem;      
+    line-height: 1.4;       
     margin: 20px 0;
     color: #333;
     font-weight: bold;
@@ -220,4 +252,24 @@ h2 {
 @keyframes popIn {
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
+}
+
+/* --- 6. RESPONSIVE (Mobile) --- */
+@media (max-width: 768px) {
+    #app-section {
+        flex-direction: column; 
+    }
+    
+    .controls-container {
+        width: 100%;
+        margin-bottom: 20px; 
+    }
+
+    #list {
+        width: 100%; /* On mobile, let list take full width */
+    }
+
+    .wheel-container {
+        width: 100%;
+    }
 }
