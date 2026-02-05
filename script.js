@@ -63,8 +63,15 @@ function drawWheel() {
         ctx.textAlign = "right"; 
         ctx.fillStyle = "white";
         ctx.font = "bold 18px Arial";
-        ctx.fillText(items[i], 160, 5);
-        ctx.restore(); 
+        let textToDraw = items[i];
+        
+        // If the text is longer than 15 characters, cut it and add "..."
+        if (textToDraw.length > 15) {
+            textToDraw = textToDraw.substring(0, 15) + "...";
+        }
+        ctx.fillText(textToDraw, 160, 5); 
+      
+        ctx.restore();
     }
 }
 
@@ -75,13 +82,66 @@ input.addEventListener("keypress", function(event) {
         addBtn.click();
     }
 });
+// --- NEW FUNCTION: CHECK IF TEXT IS A URL ---
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
 
-addBtn.addEventListener('click', function() {
+addBtn.addEventListener('click', async function() {
     const text = input.value;
     if (text === "") return;
 
+    // 1. Check if it is a link
+    if (isValidUrl(text)) {
+        // Show loading state (optional, but good for UX)
+        input.value = "Searching..."; 
+        input.disabled = true; // Stop user from typing while we wait
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/get-title', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: text })
+            });
+
+            const data = await response.json();
+
+            // RESET INPUT UI
+            input.value = "";
+            input.disabled = false;
+            input.focus();
+
+            // 2. SUCCESS CHECK
+            if (response.ok && data.title) {
+                addItemToWheel(data.title); // Only add if we got a real title
+            } else {
+                // 3. FAILURE: Show popup, DO NOT add to wheel
+                alert("❌ Could not find product name!\n(The site might be blocking us)");
+                return; // Stop here. Do nothing else.
+            }
+
+        } catch (error) {
+            // Network Error (Server is down)
+            input.value = "";
+            input.disabled = false;
+            alert("❌ Server Error: Is your Python script running?");
+            return; // Stop here.
+        }
+    } else {
+        // Not a link? Just add the text normally.
+        input.value = "";
+        addItemToWheel(text);
+    }
+});
+
+// Helper function to keep code clean
+function addItemToWheel(text) {
     items.push(text);
-    input.value = "";
     
     const li = document.createElement('li');
     const textSpan = document.createElement('span');
@@ -104,8 +164,7 @@ addBtn.addEventListener('click', function() {
     li.appendChild(deleteBtn);
     list.appendChild(li);
     drawWheel();
-});
-
+}
 // --- NEW PHYSICS: QUINTIC EASING ---
 // This creates the "Suspense" effect (starts fast, ends VERY slow)
 function easeOutQuint(t) {
