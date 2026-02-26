@@ -1,0 +1,318 @@
+/* --- 1. GENERAL & LAYOUT --- */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+#app-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;            
+    justify-content: space-around; 
+    align-items: flex-start; /* Aligns items to top so list can grow down */
+}
+
+h2 {
+    text-align: center;
+}
+
+.input-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.controls-container {
+    width: 35%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the list inside this container */
+}
+/* --- 3. THE LIST (Corrected Name) --- */
+#itemList {
+    /* 1. Remove standard bullets (The "Normal Points") */
+    list-style: none; 
+    
+    /* 2. Layout constraints */
+    width: 300px;           
+    max-width: 100%;        
+    padding: 0;
+    margin-top: 20px;
+    margin-left: 0; /* Reset this to be safe */
+}
+
+#itemList li {
+    display: flex;          
+    justify-content: space-between; 
+    align-items: center;    
+    
+    background-color: #fff;       
+    border: 1px solid #ddd; 
+    margin-bottom: 5px;     
+    padding: 8px;           
+    border-radius: 4px;     
+    
+    width: 100%;            
+    box-sizing: border-box; 
+    
+    /* --- ICON SETTINGS --- */
+    /* This makes space for the icon so text doesn't sit on top of it */
+    padding-left: 35px;               
+    
+    /* Default to Icon 1 */
+    background-image: url('icon1.png');
+    background-size: 20px 20px;      
+    background-repeat: no-repeat;
+    background-position: 10px center; /* Position icon inside the padding area */
+}
+
+/* Optional: If you still want alternating icons (Icon 1, Icon 2, Icon 1...) */
+/* If not, you can delete this part */
+#itemList li:nth-child(even) {
+    background-image: url('icon2.png');
+}
+
+/* --- THE TEXT SPAN --- */
+#itemList li span {
+    font-size: 16px;
+    color: #333;
+    
+    word-break: break-all;   
+    overflow-wrap: anywhere; 
+    white-space: normal;     
+    
+    flex: 1;                 
+    min-width: 0;            
+    margin-right: 10px;      
+    text-align: left;        
+}
+
+.delete-btn {
+    flex-shrink: 0;          
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;       
+    transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.1); 
+    filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); 
+}
+
+/* --- 3. THE BUTTONS --- */
+#spinBtn {
+    margin-top: 20px; 
+    width: 100%; 
+    max-width: 300px;
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#reset {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#resetbtn {
+    padding: 10px 30px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* BUTTON HOVER EFFECTS */
+#addBtn, #spinBtn, #resetbtn {
+    transition: all 0.2s ease-in-out; 
+}
+
+#addBtn:hover, #spinBtn:hover, #resetbtn:hover {
+    transform: scale(1.05); 
+    filter: brightness(1.2); 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
+    cursor: pointer;
+}
+
+/* --- 4. THE WHEEL & ARROW --- */
+.wheel-container {
+    position: relative; 
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.wheel-arrow {
+    position: absolute;
+    top: -10px;       
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid #FF5733; 
+    transform-origin: top center; 
+    z-index: 10;
+    display: none; 
+}
+
+.wheel-arrow.flick {
+    animation: flick-action 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes flick-action {
+    0% { transform: translateX(-50%) rotate(0deg); }
+    35% { transform: translateX(-50%) rotate(-45deg); } 
+    70% { transform: translateX(-50%) rotate(10deg); } 
+    100% { transform: translateX(-50%) rotate(0deg); } 
+}
+
+/* --- 5. MODAL STYLES (Winner Popup) --- */
+.modal-overlay {
+    display: none; 
+    position: fixed; 
+    z-index: 1000;   
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center;
+    align-items: center;
+}
+
+/* This targets the inner white box */
+.modal-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    
+    /* FIX: Ensure box stays within screen */
+    width: 80%;
+    max-width: 400px; 
+    
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease-out;
+    position: relative;
+    
+    /* FIX: Force wrapping inside the box */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
+}
+
+.modal-box h2 {
+    color: #FF5733;
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+/* The Winner Text Styling */
+#winnerText {
+    width: 100%;            
+    display: block;         
+    overflow-wrap: anywhere; 
+    font-size: 1.5rem;      
+    line-height: 1.4;       
+    margin: 20px 0;
+    color: #333;
+    font-weight: bold;
+}
+
+#closeModalBtn {
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+#closeModalBtn:hover {
+    background-color: #357ABD;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-icon:hover {
+    color: #333;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- 6. RESPONSIVE (Mobile) --- */
+@media (max-width: 768px) {
+    #app-section {
+        flex-direction: column; 
+    }
+    
+    .controls-container {
+        width: 100%;
+        margin-bottom: 20px; 
+    }
+
+    #list {
+        width: 100%; /* On mobile, let list take full width */
+    }
+
+    .wheel-container {
+        width: 100%;
+    }
+}
+/* Container to center everything */
+.spinner-container {
+    text-align: center;
+    margin-top: 15px;
+    color: white; /* Or black, depending on your theme */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* The Rotating Ring */
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(255, 255, 255, 0.3); /* Light circle */
+    border-top: 4px solid #ffffff; /* White moving part */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px auto; /* Centers it */
+}
+
+/* The Animation Engine */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* --- THE GLOBAL LOCK --- */
+/* When this class is added, you CANNOT click anything inside */
+.frozen {
+    pointer-events: none; /* The Magic Line: Ignores all clicks */
+    opacity: 0.5;         /* Makes it look disabled */
+    filter: grayscale(100%); /* Optional: Turns it grey */
+}
